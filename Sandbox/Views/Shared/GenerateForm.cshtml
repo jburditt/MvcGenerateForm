@@ -1,0 +1,44 @@
+﻿@using System.ComponentModel.DataAnnotations
+@{
+    if (Model != null)
+    {
+        var properties = Model.GetType().GetProperties();
+        foreach (var property in properties)
+        {
+            Type propertyType;
+            if (Nullable.GetUnderlyingType(property.PropertyType) != null)
+                propertyType = Nullable.GetUnderlyingType(property.PropertyType);
+            else
+                propertyType = property.PropertyType;
+
+            if (propertyType == typeof(string) || propertyType == typeof(int))
+            {
+                string value = Convert.ToString(property.GetValue(Model, null));
+                var name = (string)property.Name;
+
+                string displayName = name;
+                object[] attrs = property.GetCustomAttributes(true);
+                foreach (object attr in attrs)
+                {
+                    var displayAttribute = attr as DisplayAttribute;
+                    if (displayAttribute != null)
+                    {
+                        displayName = displayAttribute.Name;
+                    }
+                }
+    <div class="row">
+        <div class="col-lg-3">
+            @Html.Label(name, displayName, new { @class = "control-label" })
+        </div>
+        <div class="col-lg-3">
+            @Html.TextBox(name, value, new { @class = "form-control" })
+            @Html.ValidationMessage(name, new { @class = "text-danger" })
+            <br />
+            <br />
+        </div>
+    </div>
+
+            }
+        }
+    }
+}

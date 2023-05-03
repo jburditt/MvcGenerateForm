@@ -1,0 +1,15 @@
+﻿@model FormViewModel
+@{
+    ViewData["Title"] = "Home page";
+}
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
+
+<p><br /><br /><br /></p>
+
+<form asp-action="Save">
+    <partial name="GenerateForm" model="Model" />
+
+    <input type="submit" value="Submit" />
+</form>
